@@ -1,0 +1,168 @@
+# Vauban Configuration
+# =====================
+# The Scientific Breacher - Configuration File
+
+general:
+  name: "Vauban"
+  version: "2.0"
+  author: "Kassim Muhammad Atiku (R00TQU35T)"
+  threads: 10
+  timeout: 30
+  rate_limit: 150
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  output_dir: "./output"
+
+# Reconnaissance Settings
+recon:
+  subdomain:
+    enabled: true
+    tools:
+      - subfinder
+      - assetfinder
+      - amass
+    use_chaos: true
+    recursion_depth: 2
+  
+  dns:
+    resolver: "8.8.8.8,1.1.1.1"
+    wildcard_detection: true
+    retry: 2
+
+  tech_detect:
+    enabled: true
+    detect_waf: true
+    detect_cms: true
+
+# URL Discovery Settings
+urls:
+  passive:
+    enabled: true
+    tools:
+      - gau
+      - waybackurls
+    include_subdomains: true
+  
+  crawler:
+    enabled: true
+    depth: 3
+    js_crawl: true
+    headless: true
+    scope: "in-scope"
+  
+  js_analysis:
+    enabled: true
+    find_secrets: true
+    find_endpoints: true
+
+# API Discovery Settings
+api:
+  endpoints:
+    enabled: true
+    use_kiterunner: true
+    use_ffuf: true
+    wordlist: "config/wordlists/api-routes.txt"
+  
+  params:
+    enabled: true
+    use_arjun: true
+    threads: 5
+  
+  openapi:
+    enabled: true
+    paths:
+      - "/swagger.json"
+      - "/swagger.yaml"
+      - "/openapi.json"
+      - "/openapi.yaml"
+      - "/api-docs"
+      - "/v1/swagger.json"
+      - "/v2/swagger.json"
+      - "/v3/swagger.json"
+
+# Scanning Settings
+scan:
+  nuclei:
+    enabled: true
+    dast: true
+    templates:
+      - cves
+      - exposures
+      - vulnerabilities
+      - takeovers
+      - misconfiguration
+    severity: "medium,high,critical"
+    retries: 2
+    bulk_size: 50
+    rate_limit: 150
+  
+  secrets:
+    enabled: true
+    patterns:
+      - api_key
+      - aws_key
+      - jwt
+      - private_key
+      - password
+      - token
+      - secret
+  
+  custom:
+    enabled: true
+    checks:
+      - idor
+      - bola
+      - rate_limit
+      - mass_assignment
+      - graphql_introspection
+
+# Reporting Settings
+report:
+  formats:
+    - html
+    - json
+  include_evidence: true
+  theme: "vauban"
+  
+  # Vauban Color Palette
+  colors:
+    background: "#0C0C0C"
+    secondary_bg: "#1A1A1A"
+    text: "#B0B0B0"
+    primary: "#00FFFF"
+    accent: "#FF00FF"
+    success: "#00FF41"
+    warning: "#FFD700"
+    high: "#FF6600"
+    critical: "#FF0000"
+
+# Notifications
+notifications:
+  slack:
+    enabled: false
+    webhook_url: ""
+    channel: "#security-alerts"
+  
+  discord:
+    enabled: false
+    webhook_url: ""
+  
+  telegram:
+    enabled: false
+    bot_token: ""
+    chat_id: ""
+
+# Tool Paths (auto-detected if in PATH)
+tools:
+  subfinder: "subfinder"
+  amass: "amass"
+  assetfinder: "assetfinder"
+  httpx: "httpx"
+  nuclei: "nuclei"
+  katana: "katana"
+  gau: "gau"
+  waybackurls: "waybackurls"
+  dnsx: "dnsx"
+  kiterunner: "kr"
+  ffuf: "ffuf"
+  arjun: "arjun"
+  uro: "uro"
